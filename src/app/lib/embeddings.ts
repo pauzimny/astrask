@@ -1,4 +1,5 @@
-import fs from "fs";
+import fs from "node:fs";
+
 import { createClient } from "@supabase/supabase-js";
 import OpenAI from "openai";
 
@@ -24,11 +25,17 @@ export async function uploadEmbeddings(filePath: string) {
 
     const embedding = response.data[0].embedding;
 
-    await supabase.from("documents").insert({
+    const { error } = await supabase.from("documents").insert({
       content: chunk,
       embedding: embedding,
     });
+
+    if (error) {
+      throw new Error(
+        `Supabase insert failed: ${error.message} (code: ${error.code})`
+      );
+    }
   }
 
-  console.log(`Embeddings from ${filePath} uploaded to Supabase`);
+  console.log(`✅ Embeddings from ${filePath} uploaded to Supabase`);
 }

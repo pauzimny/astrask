@@ -1,9 +1,11 @@
-import { uploadEmbeddings } from "../lib/embeddings";
+import { uploadEmbeddings } from "../lib/embeddings.ts";
 
-async function main() {
-  await uploadEmbeddings("data/astro.txt");
-}
-
-main()
-  .then(() => console.log("Upload finished!"))
-  .catch((err) => console.error("Upload failed:", err));
+(async () => {
+  try {
+    await uploadEmbeddings("src/app/data/astro.txt");
+  } catch (err) {
+    console.error("Caught error type:", typeof err);
+    console.error("Constructor:", err?.constructor?.name);
+    console.dir(err, { depth: null });
+  }
+})();
