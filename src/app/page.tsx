@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import { askAstro } from "./services/ask.ts";
 
 export default function Home() {
   const [question, setQuestion] = useState("");
@@ -13,13 +14,8 @@ export default function Home() {
     setAnswer("");
 
     try {
-      const res = await fetch("/api/ask", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ question, mode }),
-      });
-      const data = await res.json();
-      setAnswer(data.answer);
+      const answer = await askAstro(question);
+      setAnswer(answer);
     } catch (err) {
       console.error(err);
       setAnswer("Ups, coś poszło nie tak. Spróbuj jeszcze raz. 🚀");
@@ -29,7 +25,8 @@ export default function Home() {
   }
 
   return (
-    <div className="relative min-h-screen p-10 max-w-xl mx-auto text-center overflow-hidden bg-black">
+    <div className="relative min-h-screen py-10 px-20 mx-auto text-center overflow-hidden ">
+      <div className="absolute inset-0 bg-gradient-to-b from-violet-900 via-purple-700 to-black z-0"></div>
       <div className="absolute inset-0">
         {Array.from({ length: 100 }).map((_, i) => (
           <div
@@ -45,50 +42,54 @@ export default function Home() {
           />
         ))}
       </div>
-
-      <h1 className="relative text-3xl font-bold mb-4 text-white">
-        🌌 Astrask 🚀
-      </h1>
-
-      <div className="relative flex gap-2 justify-center mb-4">
-        <button
-          onClick={() => setMode("ask")}
-          className={`px-4 py-2 rounded ${
-            mode === "ask" ? "bg-blue-500 text-white" : "bg-gray-200"
-          }`}
+      <div className="relative max-w-[1200px] mx-auto">
+        <h1
+          className="relative text-5xl font-extrabold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-purple-400 via-pink-500 to-white 
+               animate-pulse-shadow"
         >
-          Tryb pytania
-        </button>
-        <button
-          onClick={() => setMode("quiz")}
-          className={`px-4 py-2 rounded ${
-            mode === "quiz" ? "bg-green-500 text-white" : "bg-gray-200"
-          }`}
-        >
-          Tryb quizu
-        </button>
-      </div>
+          Astrask 🚀
+        </h1>
 
-      <input
-        type="text"
-        placeholder="Zadaj pytanie o kosmos..."
-        value={question}
-        onChange={(e) => setQuestion(e.target.value)}
-        className="relative border p-2 rounded w-full text-white border-white"
-      />
-      <button
-        onClick={handleAsk}
-        className="mt-4 px-4 py-2 bg-purple-500 text-white rounded relative"
-        disabled={loading}
-      >
-        {loading ? "Ładowanie..." : "Start"}
-      </button>
-
-      {answer && (
-        <div className="mt-6 p-4 border rounded bg-indigo-50 relative">
-          <p className="text-lg">{answer}</p>
+        <div className="relative flex gap-2 justify-center mb-4">
+          <button
+            onClick={() => setMode("ask")}
+            className={`px-4 py-2 rounded min-w-[50%] ${
+              mode === "ask" ? "bg-violet-500 text-white" : "bg-gray-200"
+            }`}
+          >
+            Tryb pytania
+          </button>
+          <button
+            onClick={() => setMode("quiz")}
+            className={`px-4 py-2 rounded min-w-[50%] ${
+              mode === "quiz" ? "bg-violet-500 text-white" : "bg-gray-200"
+            }`}
+          >
+            Tryb quizu
+          </button>
         </div>
-      )}
+
+        <textarea
+          placeholder="Zadaj pytanie o kosmos..."
+          value={question}
+          rows={5}
+          onChange={(e) => setQuestion(e.target.value)}
+          className="relative border p-2 rounded w-full text-white border-white"
+        />
+        <button
+          onClick={handleAsk}
+          className="mt-4 px-4 py-2 bg-white text-black rounded relative w-full"
+          disabled={loading}
+        >
+          {loading ? "Ładowanie..." : "Zapytaj o kosmos!"}
+        </button>
+
+        {answer && (
+          <div className="mt-6 p-4 border rounded bg-indigo-50 relative">
+            <p className="text-lg">{answer}</p>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
