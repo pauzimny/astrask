@@ -53,19 +53,19 @@ export default function Home() {
         <div className="relative flex gap-2 justify-center mb-4">
           <button
             onClick={() => setMode("ask")}
-            className={`px-4 py-2 rounded min-w-[50%] ${
+            className={`px-4 py-2 rounded min-w-[50%] font-bold ${
               mode === "ask" ? "bg-violet-500 text-white" : "bg-gray-200"
             }`}
           >
-            Tryb pytania
+            Zadaj pytanie
           </button>
           <button
             onClick={() => setMode("quiz")}
-            className={`px-4 py-2 rounded min-w-[50%] ${
+            className={`px-4 py-2 rounded min-w-[50%] font-bold ${
               mode === "quiz" ? "bg-violet-500 text-white" : "bg-gray-200"
             }`}
           >
-            Tryb quizu
+            Quiz
           </button>
         </div>
 
@@ -78,14 +78,14 @@ export default function Home() {
         />
         <button
           onClick={handleAsk}
-          className="mt-4 px-4 py-2 bg-white text-black rounded relative w-full"
+          className="mt-4 px-4 py-2 bg-white text-black rounded relative w-full font-bold"
           disabled={loading}
         >
           {loading ? "Ładowanie..." : "Zapytaj o kosmos!"}
         </button>
 
         {answer && (
-          <div className="mt-6 p-4 border rounded bg-indigo-50 relative">
+          <div className="mt-6 p-6 border-2 border-purple-400 rounded-2xl bg-violet-900 text-white">
             <p className="text-lg">{answer}</p>
           </div>
         )}
