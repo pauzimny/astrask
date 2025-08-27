@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import { askAstro } from "./services/ask.ts";
+import Quiz from "./components/Quiz.tsx";
 
 export default function Home() {
   const [question, setQuestion] = useState("");
@@ -24,6 +25,12 @@ export default function Home() {
     }
   }
 
+  function handleQuizStart() {
+    setAnswer(
+      "🚀 Quiz jeszcze nie został zaimplementowany, ale tutaj się zacznie!"
+    );
+  }
+
   return (
     <div className="relative min-h-screen py-10 px-20 mx-auto text-center overflow-hidden ">
       <div className="absolute inset-0 bg-gradient-to-b from-violet-900 via-purple-700 to-black z-0"></div>
@@ -43,10 +50,7 @@ export default function Home() {
         ))}
       </div>
       <div className="relative max-w-[1200px] mx-auto">
-        <h1
-          className="relative text-5xl font-extrabold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-purple-400 via-pink-500 to-white 
-               animate-pulse-shadow"
-        >
+        <h1 className="relative text-5xl font-extrabold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-purple-400 via-pink-500 to-white animate-pulse-shadow">
           Astrask 🚀
         </h1>
 
@@ -69,25 +73,31 @@ export default function Home() {
           </button>
         </div>
 
-        <textarea
-          placeholder="Zadaj pytanie o kosmos..."
-          value={question}
-          rows={5}
-          onChange={(e) => setQuestion(e.target.value)}
-          className="relative border p-2 rounded w-full text-white border-white"
-        />
-        <button
-          onClick={handleAsk}
-          className="mt-4 px-4 py-2 bg-white text-black rounded relative w-full font-bold"
-          disabled={loading}
-        >
-          {loading ? "Ładowanie..." : "Zapytaj o kosmos!"}
-        </button>
+        {mode === "ask" && (
+          <>
+            <textarea
+              placeholder="Zadaj pytanie o kosmos..."
+              value={question}
+              rows={5}
+              onChange={(e) => setQuestion(e.target.value)}
+              className="relative border p-2 rounded w-full text-white border-white"
+            />
+            <button
+              onClick={handleAsk}
+              className="mt-4 px-4 py-2 bg-white text-black rounded relative w-full font-bold"
+              disabled={loading}
+            >
+              {loading ? "Ładowanie..." : "Zapytaj o kosmos!"}
+            </button>
+          </>
+        )}
 
-        {answer && (
-          <div className="mt-6 p-6 border-2 border-purple-400 rounded-2xl bg-violet-900 text-white">
-            <p className="text-lg">{answer}</p>
-          </div>
+        {mode === "quiz" && (
+          <Quiz
+            onQuizStart={handleQuizStart}
+            loading={loading}
+            answer={answer}
+          />
         )}
       </div>
     </div>
