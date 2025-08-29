@@ -3,15 +3,10 @@ import { useState } from "react";
 import Quiz from "./components/Quiz.tsx";
 import Ask from "./components/Ask.tsx";
 
-export default function Home() {
-  const [answer, setAnswer] = useState("");
-  const [mode, setMode] = useState<"ask" | "quiz">("ask");
+export type TAstroMode = "ask" | "quiz";
 
-  function handleQuizStart() {
-    setAnswer(
-      "🚀 Quiz jeszcze nie został zaimplementowany, ale tutaj się zacznie!"
-    );
-  }
+export default function Home() {
+  const [mode, setMode] = useState<TAstroMode>("ask");
 
   return (
     <div className="relative min-h-screen py-10 px-20 mx-auto text-center overflow-hidden ">
@@ -57,9 +52,7 @@ export default function Home() {
 
         {mode === "ask" && <Ask />}
 
-        {mode === "quiz" && (
-          <Quiz onQuizStart={handleQuizStart} answer={answer} />
-        )}
+        {mode === "quiz" && <Quiz />}
       </div>
     </div>
   );
