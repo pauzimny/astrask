@@ -1,29 +1,11 @@
 "use client";
 import { useState } from "react";
-import { askAstro } from "./services/ask.ts";
 import Quiz from "./components/Quiz.tsx";
+import Ask from "./components/Ask.tsx";
 
 export default function Home() {
-  const [question, setQuestion] = useState("");
   const [answer, setAnswer] = useState("");
   const [mode, setMode] = useState<"ask" | "quiz">("ask");
-  const [loading, setLoading] = useState(false);
-
-  async function handleAsk() {
-    if (!question) return;
-    setLoading(true);
-    setAnswer("");
-
-    try {
-      const answer = await askAstro(question);
-      setAnswer(answer);
-    } catch (err) {
-      console.error(err);
-      setAnswer("Ups, coś poszło nie tak. Spróbuj jeszcze raz. 🚀");
-    } finally {
-      setLoading(false);
-    }
-  }
 
   function handleQuizStart() {
     setAnswer(
@@ -73,31 +55,10 @@ export default function Home() {
           </button>
         </div>
 
-        {mode === "ask" && (
-          <>
-            <textarea
-              placeholder="Zadaj pytanie o kosmos..."
-              value={question}
-              rows={5}
-              onChange={(e) => setQuestion(e.target.value)}
-              className="relative border p-2 rounded w-full text-white border-white"
-            />
-            <button
-              onClick={handleAsk}
-              className="mt-4 px-4 py-2 bg-white text-black rounded relative w-full font-bold"
-              disabled={loading}
-            >
-              {loading ? "Ładowanie..." : "Zapytaj o kosmos!"}
-            </button>
-          </>
-        )}
+        {mode === "ask" && <Ask />}
 
         {mode === "quiz" && (
-          <Quiz
-            onQuizStart={handleQuizStart}
-            loading={loading}
-            answer={answer}
-          />
+          <Quiz onQuizStart={handleQuizStart} answer={answer} />
         )}
       </div>
     </div>
