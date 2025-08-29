@@ -1,28 +1,12 @@
 "use client";
 import { useState } from "react";
-import { askAstro } from "./services/ask.ts";
+import Quiz from "./components/Quiz.tsx";
+import Ask from "./components/Ask.tsx";
+
+export type TAstroMode = "ask" | "quiz";
 
 export default function Home() {
-  const [question, setQuestion] = useState("");
-  const [answer, setAnswer] = useState("");
-  const [mode, setMode] = useState<"ask" | "quiz">("ask");
-  const [loading, setLoading] = useState(false);
-
-  async function handleAsk() {
-    if (!question) return;
-    setLoading(true);
-    setAnswer("");
-
-    try {
-      const answer = await askAstro(question);
-      setAnswer(answer);
-    } catch (err) {
-      console.error(err);
-      setAnswer("Ups, coś poszło nie tak. Spróbuj jeszcze raz. 🚀");
-    } finally {
-      setLoading(false);
-    }
-  }
+  const [mode, setMode] = useState<TAstroMode>("ask");
 
   return (
     <div className="relative min-h-screen py-10 px-20 mx-auto text-center overflow-hidden ">
@@ -43,10 +27,7 @@ export default function Home() {
         ))}
       </div>
       <div className="relative max-w-[1200px] mx-auto">
-        <h1
-          className="relative text-5xl font-extrabold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-purple-400 via-pink-500 to-white 
-               animate-pulse-shadow"
-        >
+        <h1 className="relative text-5xl font-extrabold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-purple-400 via-pink-500 to-white animate-pulse-shadow">
           Astrask 🚀
         </h1>
 
@@ -69,26 +50,9 @@ export default function Home() {
           </button>
         </div>
 
-        <textarea
-          placeholder="Zadaj pytanie o kosmos..."
-          value={question}
-          rows={5}
-          onChange={(e) => setQuestion(e.target.value)}
-          className="relative border p-2 rounded w-full text-white border-white"
-        />
-        <button
-          onClick={handleAsk}
-          className="mt-4 px-4 py-2 bg-white text-black rounded relative w-full font-bold"
-          disabled={loading}
-        >
-          {loading ? "Ładowanie..." : "Zapytaj o kosmos!"}
-        </button>
+        {mode === "ask" && <Ask />}
 
-        {answer && (
-          <div className="mt-6 p-6 border-2 border-purple-400 rounded-2xl bg-violet-900 text-white">
-            <p className="text-lg">{answer}</p>
-          </div>
-        )}
+        {mode === "quiz" && <Quiz />}
       </div>
     </div>
   );
