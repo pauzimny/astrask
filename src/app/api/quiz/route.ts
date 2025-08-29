@@ -1,17 +1,16 @@
-import { TQuizQuestion } from "@/app/types/quiz-question.ts";
 import { NextResponse } from "next/server.js";
 import OpenAI from "openai";
 
 const askQuizQuestionPrompt = `Wygeneruj 5 pytań quizowych o kosmosie w języku polskim. 
 Każde pytanie ma mieć 3 możliwe odpowiedzi (A, B, C) i oznaczoną poprawną odpowiedź. 
 Zwróć dane w czystym JSON o strukturze:
-[
+{ quiz: [
   {
     "question": "Pytanie...",
     "options": ["A", "B", "C"],
     "correct": 0
   }
-] 
+]},
 gdzie "correct" to indeks poprawnej odpowiedzi w tablicy options.`;
 
 const openai = new OpenAI({
